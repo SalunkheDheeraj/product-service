@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
      
-    public String CreateProduct(Product product) {
+    public String CreateProduct(Product product, String supplierId) {
         // 1. Check if a product with the same name already exists
         Optional<Product> existingProduct = productRepository.findByNameAndSupplierId(
             product.getName(), 
@@ -32,8 +32,17 @@ public class ProductService {
 
         // 3. If it doesn't exist, proceed with creation
         product.setListedAt(java.time.LocalDateTime.now());
+        product.setSupplierId(supplierId);
         Product savedProduct = productRepository.save(product);
         return savedProduct.getId(); // Return the ID of the newly created product (better practice)
+    }
+
+    public boolean updateProductQuantity(String id, int quantity) {
+        return productRepository.findById(id).map(existingProduct -> {
+            existingProduct.setQuantity(quantity);
+            productRepository.save(existingProduct);
+            return true;
+        }).orElse(false);
     }
 
     public List<Product> GetProductsByCategory(String category) {
