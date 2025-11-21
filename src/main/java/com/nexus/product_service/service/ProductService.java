@@ -63,7 +63,18 @@ public class ProductService {
         return productRepository.findById(id);
     }
     
-    public boolean updateProduct(String id, Product updatedProduct) {
+    public boolean updateProduct(String id, Product updatedProduct, String supplierId) {
+        // Check if the product exists and if the supplierId matches
+        boolean isSupplierValid = productRepository.findById(id)
+            .map(existingProduct -> existingProduct.getSupplierId().equals(supplierId))
+            .orElse(false);
+    
+        // If the supplierId is invalid, return false
+        if (!isSupplierValid) {
+            return false;
+        }
+    
+        // Update the product if it exists
         return productRepository.findById(id).map(existingProduct -> {
             existingProduct.setName(updatedProduct.getName());
             existingProduct.setCategory(updatedProduct.getCategory());
