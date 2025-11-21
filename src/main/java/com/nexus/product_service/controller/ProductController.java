@@ -70,9 +70,9 @@ public class ProductController {
         return productService.getByID(id);
     }
     @PutMapping("/products/{id}")
-    public Map<String, String> updateProduct(@PathVariable String id, @RequestBody Product updatedProduct) {
+    public Map<String, String> updateProduct(@PathVariable String id, @RequestBody Product updatedProduct, @RequestHeader("X-User-Id") String supplierId) {
         log.info("Updating product - Product ID: {}, Data: {}", id, updatedProduct);
-        boolean updated = productService.updateProduct(id, updatedProduct);
+        boolean updated = productService.updateProduct(id, updatedProduct,supplierId);
         if (updated) {
             log.info("Product updated successfully - Product ID: {}", id);
             return Map.of("message", "Product updated successfully");
