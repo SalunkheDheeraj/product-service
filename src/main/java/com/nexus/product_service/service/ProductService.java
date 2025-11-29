@@ -18,7 +18,7 @@ public class ProductService {
         // 1. Check if a product with the same name already exists
         Optional<Product> existingProduct = productRepository.findByNameAndSupplierId(
             product.getName(), 
-            product.getSupplierId()
+            supplierId
         );
 
         if (existingProduct.isPresent()) {
@@ -26,7 +26,7 @@ public class ProductService {
             return String.format(
                 " Product '%s' already exists for supplier ID '%s' please update it.",
                 product.getName(),
-                product.getSupplierId()
+                supplierId
             );
         }
 
